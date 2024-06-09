@@ -14,7 +14,8 @@ const createShortUrl = asyncHandler(async (req, res) => {
 
     const url = await Url.create({
         shortId: nanoid(10),
-        redirectURL
+        redirectURL,
+        owner: req.user?._id
     })
 
     if (!url) {
@@ -56,11 +57,20 @@ const getRedirectUrl = asyncHandler(async (req, res) => {
 
     return res
         .status(200)
-        .json(new ApiResponse(200, url.redirectURL , "url fetched succssfully"))
+        .json(new ApiResponse(200, url.redirectURL, "url fetched succssfully"))
+
+})
+
+const getUserUrls = asyncHandler(async (req, res) => {
+
+    return res
+        .status(200)
+        .json(new ApiResponse(200, url, "url fetched sucessfully"))
 
 })
 
 export {
     createShortUrl,
-    getRedirectUrl
+    getRedirectUrl,
+    getUserUrls
 }

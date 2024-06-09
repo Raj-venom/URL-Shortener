@@ -31,7 +31,6 @@ const generateAccessAndRefereshTokens = async (userId) => {
     }
 }
 
-// todo if user created successfully Login directly
 const registerUser = asyncHandler(async (req, res) => {
 
     const { fullName, email, password } = req.body
@@ -109,13 +108,11 @@ const loginUser = asyncHandler(async (req, res) => {
             new ApiResponse(
                 200,
                 {
-                    user: loggedInUser, accessToken, refreshToken, userOld: user
+                    user: loggedInUser, accessToken, refreshToken
                 },
                 "User logged In Successfully"
             )
         )
-
-
 
 })
 
