@@ -63,6 +63,21 @@ const getRedirectUrl = asyncHandler(async (req, res) => {
 
 const getUserUrls = asyncHandler(async (req, res) => {
 
+    const url = await Url.aggregate([
+        {
+            $match:{
+                owner: req.user?._id
+            }
+        },
+        {
+            $addFields:{
+                totaClick:{
+                    $size: "$visitHistory"
+                } 
+            }
+        }
+    ])
+
     return res
         .status(200)
         .json(new ApiResponse(200, url, "url fetched sucessfully"))

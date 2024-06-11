@@ -24,7 +24,11 @@ const userSchema = new mongoose.Schema(
             trim: true,
             index: true
         },
-
+        admin:{
+            type: Boolean,
+            required: true,
+            default: false
+        },
         avatar: {
             type: String
 
