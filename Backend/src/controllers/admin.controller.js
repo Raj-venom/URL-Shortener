@@ -1,4 +1,3 @@
-import mongoose from "mongoose";
 import { asyncHandler } from "../utils/assyncHandler.js"
 import { ApiError } from "../utils/ApiError.js"
 import { ApiResponse } from "../utils/ApiResponse.js"
