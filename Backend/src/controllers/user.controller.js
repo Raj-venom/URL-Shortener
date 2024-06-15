@@ -3,7 +3,7 @@ import { ApiError } from "../utils/ApiError.js"
 import { ApiResponse } from "../utils/ApiResponse.js"
 import { User } from "../models/user.model.js"
 import jwt from "jsonwebtoken";
-
+import { signupSchema, loginSchema } from "../schema/userValidate.js"
 
 const options = {
     httpOnly: true,
@@ -35,11 +35,8 @@ const registerUser = asyncHandler(async (req, res) => {
 
     const { fullName, email, password } = req.body
 
-    if (
-        [fullName, email, password].some((field) => field?.trim() === "" || field?.trim() == undefined)
-    ) {
-        throw new ApiError(400, "All field are required")
-    }
+    // zod validation
+    signupSchema.parse(req.body)
 
     const existedUser = await User.findOne({ email })
 
@@ -73,11 +70,8 @@ const loginUser = asyncHandler(async (req, res) => {
 
     const { email, password } = req.body;
 
-    if (
-        [email, password].some((field) => field?.trim() === "" || field?.trim() == undefined)
-    ) {
-        throw new ApiError(400, "email or password is required")
-    }
+    // zod validataion
+    loginSchema.parse(req.body)
 
     const user = await User.findOne(
         {

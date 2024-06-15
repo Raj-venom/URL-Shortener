@@ -1,7 +1,8 @@
 import { ApiError } from "../utils/ApiError.js"
+import { z } from "zod"
+import { ApiResponse } from "../utils/ApiResponse.js"
 
 export const handleError = (err, req, res, next) => {
-    console.log("Err : ", err.name);
 
     if (err instanceof ApiError) {
         return res.status(err.statusCode).json({
@@ -9,6 +10,22 @@ export const handleError = (err, req, res, next) => {
             message: err.message,
             success: false
         });
+    }
+
+    if (err instanceof z.ZodError) {
+        
+        const formattedErrors = err.errors.reduce((acc, err) => {
+            const fieldName = err.path.join('.');
+            acc[fieldName] = err.message;
+            return acc;
+        }, {});
+
+        return res.status(400).json({
+            statusCode: 400,
+            message: formattedErrors,
+            success: false
+        })
+        
     }
 
     if (err.name === 'SyntaxError' && err.type === 'entity.parse.failed') {
