@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Link, useNavigate } from "react-router-dom"
 import { Button, Input } from "./index"
 import authService from '../services/auth'
@@ -8,21 +8,19 @@ function Login() {
 
     const navigate = useNavigate()
     const { register, handleSubmit } = useForm()
+    const [error, setError] = useState("")
 
     const login = async (data) => {
-
+        setError("")
         try {
             const session = await authService.login(data)
             if (session) {
-                // const userData = await 
                 console.log(session);
-                // navigate("/")
-            }else{
-                console.log("no sesssion");
+                navigate("/")
             }
-            console.log(data);
         } catch (error) {
-
+            console.log(error);
+            setError(error.response.data.message)
         }
     }
 
@@ -32,7 +30,7 @@ function Login() {
                 <h1 className=' text-zinc-900 text-3xl font-semibold'>Login</h1>
             </div>
 
-            {/* {error && <p className="text-red-600 mt-8 text-center">{error}</p>} */}
+            {error && <p className="text-red-600 mt-8 text-center">{error}</p>}
 
             <form onSubmit={handleSubmit(login)} >
                 <div className='space-y-3'>
